@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Controller {
-    @GetMapping(path = "test")
+    @GetMapping(path = "user/test")
     public String test() {
         return "siema";
     }
