@@ -1,12 +1,11 @@
-package user.service;
+package gateway.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Main {
+public class GatewayServiceApp {
     public static void main(String[] args) {
-        System.setProperty("service-name", "user_service");
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(GatewayServiceApp.class);
     }
 }

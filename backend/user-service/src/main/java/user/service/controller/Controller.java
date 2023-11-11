@@ -10,7 +10,7 @@ public class Controller {
 
     static Logger log = LoggerFactory.getLogger(Controller.class);
 
-    @GetMapping(path = "test")
+    @GetMapping(path = "user/test")
     public String test() {
         log.info("test");
         return "siema";
