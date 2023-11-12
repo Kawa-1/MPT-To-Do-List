@@ -19,7 +19,7 @@
     </encoder>
   </appender>
 
-  <logger name="gateway.service" level="INFO"> 
+  <logger name="pl.kt.agh.edu" level="INFO" additivity="false">
     <appender-ref ref="FILE" /> 
   </logger>
 

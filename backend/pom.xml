@@ -20,6 +20,8 @@
         <module>user-service</module>
         <module>discovery-service</module>
         <module>gateway-service</module>
+        <module>auth-service</module>
+        <module>common</module>
     </modules>
 
     <dependencies>
