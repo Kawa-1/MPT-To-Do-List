@@ -33,3 +33,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### logs ###
+logs/
+
+### Linux stuff ###
+%1
