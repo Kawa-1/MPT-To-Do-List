@@ -1,13 +1,14 @@
-<div class="container-fluid" style="height: 100vz">
+<div class="container-fluid">
   <div
     class="container-sm justify-content-center"
     style="margin-top: 10%; margin-bottom: 10%; width: 10%; min-width: 300px"
   >
     <div class="row">
-      <p class="fs-1 text-center">Zaloguj się</p>
+      <p class="fs-1 text-center text-white">Zaloguj się</p>
     </div>
     <div class="row">
       <input
+        [(ngModel)]="emailValue"
         class="form-control form-control-md"
         type="text"
         placeholder="Adres email"
@@ -20,21 +21,22 @@
         type="text"
         placeholder="Hasło"
         aria-label="pole hasło"
+        [(ngModel)]="passwordValue"
       />
     </div>
     <div class="row mt-3 justify-content-center">
       <div class="col-2"></div>
       <div class="col-8" align="center">
-        <button type="button" class="btn btn-secondary">Logowanie</button>
+        <button type="button" class="btn btn-secondary" (click)="onLogin()">Logowanie</button>
       </div>
       <div class="col-2"></div>
     </div>
     <div class="row mt-5 justify-content-center">
       <div class="col-12" align="center">
-        <p class="text-center">Nie masz konta?</p>
+        <p class="text-center text-white">Nie masz konta?</p>
       </div>
       <div class="col-12" align="center">
-        <p class="text-center text-decoration-underline">Zarejestruj się</p>
+        <p class="text-center text-decoration-underline text-white" (click)="redirectToRegister()">Zarejestruj się</p>
       </div>
     </div>
   </div>
