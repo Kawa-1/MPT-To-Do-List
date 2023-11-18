@@ -84,10 +84,15 @@
           aria-label="pole hasło"
         />
       </div>
+      <div *ngIf="!passwordMatch" class="row mt-3">
+        <div class="col">
+          <p class="text-center" style="color:red">Hała są różne!</p>
+        </div>
+      </div>
       <div class="row mt-3">
         <div class="col-2"></div>
         <div class="col-8" align="center">
-          <button type="button" class="btn btn-secondary">Zarejestruj</button>
+          <button type="button" class="btn btn-secondary" (click)="onRegister()">Zarejestruj</button>
         </div>
         <div class="col-2"></div>
       </div>
@@ -146,6 +151,11 @@
           placeholder="Powtórz hasło"
           aria-label="pole hasło"
         />
+      </div>
+      <div *ngIf="!passwordMatch" class="row mt-3">
+        <div class="col">
+          <p class="text-center" style="color:red">Hała są różne!</p>
+        </div>
       </div>
       <div class="row mt-3">
         <div class="col-2"></div>
