@@ -9,9 +9,11 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HttpClientModule } from '@angular/common/http';
+
 import { TasklistComponent } from './tasklist/tasklist.component';
 import { TaskService } from './task.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
+
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     RegisterComponent,
     DashboardComponent,
     TasklistComponent
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
