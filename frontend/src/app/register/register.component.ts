@@ -65,13 +65,13 @@ export class RegisterComponent {
       return;
     }
     let newUserData: RegisterWrapper = {
-      clientType: 'Standard',
-      clientAddress: this.clientAddress,
-      clientMail: this.clientMail,
-      clientName: this.clientName,
-      clientPassword: this.clientPassword,
-      clientPhone: this.clientPhone,
-      clientSpec: '',
+      // clientType: 'Standard',
+      // clientAddress: this.clientAddress,
+      username: this.clientMail,
+      // clientName: this.clientName,
+      password: this.clientPassword,
+      // clientPhone: this.clientPhone,
+      // clientSpec: '',
     };
     this.loginService.register(newUserData).subscribe({
       next: (data) => console.log(data),
@@ -85,13 +85,13 @@ export class RegisterComponent {
       return;
     }
     let newUserData: RegisterWrapper = {
-      clientType: 'Mechanic',
-      clientAddress: this.mechanicAddress,
-      clientMail: this.mechanicMail,
-      clientName: this.mechanicName,
-      clientPassword: this.mechanicPassword,
-      clientPhone: '',
-      clientSpec: this.mechanicSpec,
+      // clientType: 'Mechanic',
+      // clientAddress: this.mechanicAddress,
+      username: this.mechanicMail,
+      // clientName: this.mechanicName,
+      password: this.mechanicPassword,
+      // clientPhone: '',
+      // clientSpec: this.mechanicSpec,
     };
     this.loginService.register(newUserData).subscribe({
       next: (data) => console.log(data),
