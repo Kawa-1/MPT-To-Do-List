@@ -28,6 +28,7 @@ export class RegisterComponent {
   mechanicConfirmPassword: String = '';
 
   passwordMatch: Boolean = true;
+  showError: boolean = false;
 
   constructor(private router: Router, private loginService: LoginService) {}
 
@@ -75,7 +76,9 @@ export class RegisterComponent {
     };
     this.loginService.register(newUserData).subscribe({
       next: (data) => console.log(data),
-      error: (err) => console.error(err),
+      error: (err) => {console.error(err);
+        this.showError = true;
+        setTimeout(() => this.showError = false, 5000);},
     });
   }
 
@@ -95,7 +98,11 @@ export class RegisterComponent {
     };
     this.loginService.register(newUserData).subscribe({
       next: (data) => console.log(data),
-      error: (err) => console.error(err),
+      error: (err) => {
+        console.error(err);
+          this.showError = true;
+          setTimeout(() => this.showError = false, 5000);
+      },
     });
   }
 

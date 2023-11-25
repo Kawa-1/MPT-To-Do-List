@@ -6,7 +6,6 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -20,7 +19,7 @@ export class AuthGuard implements CanActivate {
   ): Promise<boolean | UrlTree> {
     let isLogged = await this.authService.checkIsLogged();
     if (!isLogged) {
-      this.router.navigate(['register']);
+      this.router.navigate(['']);
     }
     return new Promise((resolve, reject) => resolve(isLogged));
   }

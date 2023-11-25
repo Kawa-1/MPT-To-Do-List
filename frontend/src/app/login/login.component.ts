@@ -12,6 +12,7 @@ import { AuthService } from '../auth.service';
 export class LoginComponent {
   emailValue: String = '';
   passwordValue: String = '';
+  showError: boolean = false;
 
   constructor(
     private router: Router,
@@ -32,7 +33,11 @@ export class LoginComponent {
           this.authService.setToken(token);
           this.authService.checkIsLogged().then((data) => console.log(data));
         },
-        error: (err) => console.error(err),
+        error: (err) => {
+          console.error(err);
+          this.showError = true;
+          setTimeout(() => this.showError = false, 5000);
+        },
       });
   }
 }
