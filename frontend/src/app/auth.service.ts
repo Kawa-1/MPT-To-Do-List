@@ -9,8 +9,8 @@ export class AuthService {
 
   constructor(private cookieService: CookieService, private httpClient: HttpClient) {}
 
-  setToken(token:string):void{
-    this.cookieService.set('Token', token);
+  setToken(token:any):void{
+    this.cookieService.set('Token', token.jwt);
   }
 
   async checkIsLogged(): Promise<boolean> {
