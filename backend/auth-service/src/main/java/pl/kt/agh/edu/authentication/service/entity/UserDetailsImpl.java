@@ -1,6 +1,6 @@
 package pl.kt.agh.edu.authentication.service.entity;
 
-import pl.kt.agh.edu.dto.UserDTO;
+import pl.kt.agh.model.dto.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

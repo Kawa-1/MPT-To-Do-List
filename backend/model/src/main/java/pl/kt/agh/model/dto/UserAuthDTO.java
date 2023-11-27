@@ -1,4 +1,4 @@
-package pl.kt.agh.edu.dto;
+package pl.kt.agh.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

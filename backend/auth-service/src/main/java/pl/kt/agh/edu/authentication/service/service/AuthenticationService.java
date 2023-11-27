@@ -1,7 +1,7 @@
 package pl.kt.agh.edu.authentication.service.service;
 
 import pl.kt.agh.edu.authentication.service.entity.UserDetailsImpl;
-import pl.kt.agh.edu.dto.UserDTO;
+import pl.kt.agh.model.dto.UserDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
