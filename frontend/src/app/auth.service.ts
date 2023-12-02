@@ -17,6 +17,7 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       let queryParams = new HttpParams();
       queryParams.append('token', this.cookieService.get('Token'));
+      console.log(this.cookieService.get('Token'));
       this.httpClient.get<boolean>(URL + '/auth/validate', {params: queryParams
       }).subscribe({
         next: () => resolve(true),
