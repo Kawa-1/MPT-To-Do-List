@@ -7,12 +7,15 @@ import pl.kt.agh.edu.common.util.JwtUtil;
 import pl.kt.agh.model.dto.UserAuthDTO;
 import pl.kt.agh.model.dto.UserCreateDTO;
 import pl.kt.agh.model.dto.UserDTO;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 
@@ -31,33 +34,37 @@ public class AuthController {
         this.configProps = configProps;
     }
 
-    @GetMapping("/validate")
+    @GetMapping("validate")
     public void validate(@RequestParam("token") String token) {
         JwtUtil.validateToken(token, configProps.getSecret());
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public UserDTO register(@RequestBody() UserCreateDTO userCreateDTO) {
-        userCreateDTO.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
+        //userCreateDTO.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
         return restTemplate.postForObject("http://user-service/user/create", userCreateDTO, UserDTO.class);
     }
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public JwtDTO login(@RequestBody() UserAuthDTO userAuthRequest) {
         String user = userAuthRequest.getUsername();
-        String password = userAuthRequest.getPassword();
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, password));
-        if (authenticate.isAuthenticated()) {
-            String jwt = JwtUtil.createToken(
-                    userAuthRequest.getUsername(),
-                    Collections.emptyMap(),
-                    configProps.getExpirationInMillis(),
-                    configProps.getSecret()
-            );
-            return new JwtDTO(jwt);
-        } else {
-            throw new AuthenticationException("Cannot authenticate user");
+        //userAuthRequest.setPassword(passwordEncoder.encode(userAuthRequest.getPassword()));
+        UserAuthDTO userAuthDTO = restTemplate.postForObject("http://user-service/user/auth", userAuthRequest, UserAuthDTO.class);
+        //Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, password));
+        if (userAuthDTO != null)
+        {
+            System.out.println("STOP");
+            //if (authenticate.isAuthenticated()) {
+                String jwt = JwtUtil.createToken(
+                        userAuthRequest.getUsername(),
+                        Collections.emptyMap(),
+                        configProps.getExpirationInMillis(),
+                        configProps.getSecret()
+                );
+                return new JwtDTO(jwt);
+            //}
         }
+        throw new ResponseStatusException(HttpStatus.ACCEPTED); 
     }
 
 }

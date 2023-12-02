@@ -1,6 +1,7 @@
 package pl.kt.agh.edu.user.service.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import pl.kt.agh.model.entity.User;
@@ -8,4 +9,6 @@ import pl.kt.agh.model.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     
+    @Query("SELECT u FROM User u WHERE u.login = ?1 AND u.password = ?2")
+    User findByUsernameAndPassword(String username, String password);
 }

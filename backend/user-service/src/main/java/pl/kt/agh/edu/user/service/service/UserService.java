@@ -1,5 +1,6 @@
 package pl.kt.agh.edu.user.service.service;
 
+
 import org.springframework.stereotype.Service;
 import pl.kt.agh.model.entity.User;
 import pl.kt.agh.edu.user.service.repository.UserRepository;
@@ -15,5 +16,9 @@ public class UserService {
 
     public void addUser(User user) {
         userRepository.save(user);
+    }
+
+    public User getUser(User user){
+        return userRepository.findByUsernameAndPassword(user.getLogin(), user.getPassword());
     }
 }

@@ -1,6 +1,8 @@
 package pl.kt.agh.edu.user.service.controller;
 
 import org.springframework.web.bind.annotation.*;
+
+import pl.kt.agh.model.dto.UserAuthDTO;
 import pl.kt.agh.model.dto.UserCreateDTO;
 import pl.kt.agh.model.dto.UserDTO;
 import pl.kt.agh.model.entity.User;
@@ -24,15 +26,24 @@ public class Controller {
         return "siema";
     }
 
-    @GetMapping(path = "auth")
-    public UserDTO internalUserFind(@RequestParam("user") String user) {
-        return users.get(user);
+    @PostMapping(path = "user/auth")
+    public UserAuthDTO internalUserFind(@RequestBody() UserAuthDTO userAuthDTO) {
+        User user = new User();
+        user.setLogin(userAuthDTO.getUsername());
+        user.setPassword(userAuthDTO.getPassword());
+        user = userService.getUser(user);
+        if (user != null) {
+            return userAuthDTO;
+        }
+        return null;
     }
 
     @PostMapping("user/create")
     public UserDTO createUser(@RequestBody() UserCreateDTO userCreateDTO) {
         UserDTO userDTO = new UserDTO(userCreateDTO.getUsername(), userCreateDTO.getPassword(), null);
         users.put(userCreateDTO.getUsername(), userDTO);
+        
+        // insert user in DB
         User user = new User();
         user.setLogin(userDTO.getUsername());
         user.setPassword(userDTO.getPassword());

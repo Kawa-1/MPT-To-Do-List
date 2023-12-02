@@ -13,6 +13,14 @@ public class GatewayConfig {
             RouteLocatorBuilder builder,
             GatewayServiceFilter gatewayServiceFilter) {
         return builder.routes()
+                .route("user-service", r -> r.path("/user/create")
+                        .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
+                                .rewritePath("/service(?<segment>/?.*)", "$\\{segment}"))
+                        .uri("lb://user-service"))
+                .route("user-service", r -> r.path("/user/auth")
+                        .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
+                                .rewritePath("/service(?<segment>/?.*)", "$\\{segment}"))
+                        .uri("lb://user-service"))
                 .route("user-service", r -> r.path("/user/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
                                 .rewritePath("/service(?<segment>/?.*)", "$\\{segment}")
