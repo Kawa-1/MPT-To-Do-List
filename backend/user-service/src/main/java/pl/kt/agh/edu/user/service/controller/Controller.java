@@ -33,6 +33,9 @@ public class Controller {
         user.setPassword(userAuthDTO.getPassword());
         user = userService.getUser(user);
         if (user != null) {
+            // TODO: improve user service to get user only by login
+            // this is only temporary workaround
+            userAuthDTO.setPassword(user.getPassword());
             return userAuthDTO;
         }
         return null;

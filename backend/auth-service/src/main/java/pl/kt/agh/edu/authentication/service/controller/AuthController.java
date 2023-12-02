@@ -49,7 +49,7 @@ public class AuthController {
     public JwtDTO login(@RequestBody() UserAuthDTO userAuthRequest) {
         UserAuthDTO userAuthDTO = restTemplate.postForObject("http://user-service/user/auth", userAuthRequest, UserAuthDTO.class);
         //Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, password));
-        if (userAuthDTO != null && userAuthDTO.getPassword() == userAuthRequest.getPassword())
+        if (userAuthDTO != null && userAuthDTO.getPassword().equals(userAuthRequest.getPassword()))
         {
             System.out.println("STOP");
             //if (authenticate.isAuthenticated()) {
