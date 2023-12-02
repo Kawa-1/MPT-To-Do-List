@@ -9,6 +9,6 @@ import pl.kt.agh.model.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     
-    @Query("SELECT u FROM User u WHERE u.login = ?1 AND u.password = ?2")
-    User findByUsernameAndPassword(String username, String password);
+    @Query("SELECT u FROM User u WHERE u.login = ?1")
+    User findByLogin(String username);
 }

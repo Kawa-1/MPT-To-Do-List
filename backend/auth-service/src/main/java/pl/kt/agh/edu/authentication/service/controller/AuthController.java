@@ -47,11 +47,9 @@ public class AuthController {
 
     @PostMapping("login")
     public JwtDTO login(@RequestBody() UserAuthDTO userAuthRequest) {
-        String user = userAuthRequest.getUsername();
-        //userAuthRequest.setPassword(passwordEncoder.encode(userAuthRequest.getPassword()));
         UserAuthDTO userAuthDTO = restTemplate.postForObject("http://user-service/user/auth", userAuthRequest, UserAuthDTO.class);
         //Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, password));
-        if (userAuthDTO != null)
+        if (userAuthDTO != null && userAuthDTO.getPassword() == userAuthRequest.getPassword())
         {
             System.out.println("STOP");
             //if (authenticate.isAuthenticated()) {
@@ -64,7 +62,9 @@ public class AuthController {
                 return new JwtDTO(jwt);
             //}
         }
-        throw new ResponseStatusException(HttpStatus.ACCEPTED); 
+
+        // TODO: Throws 403 instead of 401, fix that
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); 
     }
 
 }
