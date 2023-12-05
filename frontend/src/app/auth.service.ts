@@ -9,14 +9,15 @@ export class AuthService {
 
   constructor(private cookieService: CookieService, private httpClient: HttpClient) {}
 
-  setToken(token:string):void{
-    this.cookieService.set('Token', token);
+  setToken(token:any):void{
+    this.cookieService.set('Token', token.jwt);
   }
 
   async checkIsLogged(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       let queryParams = new HttpParams();
       queryParams.append('token', this.cookieService.get('Token'));
+      console.log(this.cookieService.get('Token'));
       this.httpClient.get<boolean>(URL + '/auth/validate', {params: queryParams
       }).subscribe({
         next: () => resolve(true),

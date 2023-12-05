@@ -49,7 +49,7 @@ export class RegisterComponent {
   }
 
   redirectToLogin(): void {
-    this.router.navigate(['']);
+    this.router.navigate(['/login']);
   }
 
   onRegister(): void {
