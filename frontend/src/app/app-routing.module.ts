@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AboutComponent } from './about/about.component';
 import { AuthGuard } from './auth.guard';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 
@@ -15,6 +16,7 @@ const routes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard],
   },
+  { path: 'about', component: AboutComponent}
 ];
 
 @NgModule({
