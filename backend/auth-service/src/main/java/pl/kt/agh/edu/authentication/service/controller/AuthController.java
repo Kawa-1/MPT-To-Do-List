@@ -1,63 +1,35 @@
 package pl.kt.agh.edu.authentication.service.controller;
 
-import pl.kt.agh.edu.authentication.service.config.AuthenticationConfigProps;
+import org.springframework.web.bind.annotation.*;
 import pl.kt.agh.edu.authentication.service.dto.JwtDTO;
-import pl.kt.agh.edu.common.exception.AuthenticationException;
-import pl.kt.agh.edu.common.util.JwtUtil;
+import pl.kt.agh.edu.authentication.service.service.AuthenticationService;
+import pl.kt.agh.edu.authentication.service.service.UserDetailsServiceImpl;
 import pl.kt.agh.model.dto.UserAuthDTO;
 import pl.kt.agh.model.dto.UserCreateDTO;
 import pl.kt.agh.model.dto.UserDTO;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Collections;
 
 @RestController
 @RequestMapping("auth")
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
-    private final RestTemplate restTemplate;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationConfigProps configProps;
+    private final AuthenticationService authenticationService;
 
-    public AuthController(AuthenticationManager authenticationManager, RestTemplate restTemplate, PasswordEncoder passwordEncoder, AuthenticationConfigProps configProps) {
-        this.authenticationManager = authenticationManager;
-        this.restTemplate = restTemplate;
-        this.passwordEncoder = passwordEncoder;
-        this.configProps = configProps;
+    public AuthController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
-    @GetMapping("/validate")
+    @GetMapping("validate")
     public void validate(@RequestParam("token") String token) {
-        JwtUtil.validateToken(token, configProps.getSecret());
+        authenticationService.validateToken(token);
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public UserDTO register(@RequestBody() UserCreateDTO userCreateDTO) {
-        userCreateDTO.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
-        return restTemplate.postForObject("http://user-service/user/create", userCreateDTO, UserDTO.class);
+        return authenticationService.registerUser(userCreateDTO);
     }
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public JwtDTO login(@RequestBody() UserAuthDTO userAuthRequest) {
-        String user = userAuthRequest.getUsername();
-        String password = userAuthRequest.getPassword();
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, password));
-        if (authenticate.isAuthenticated()) {
-            String jwt = JwtUtil.createToken(
-                    userAuthRequest.getUsername(),
-                    Collections.emptyMap(),
-                    configProps.getExpirationInMillis(),
-                    configProps.getSecret()
-            );
-            return new JwtDTO(jwt);
-        } else {
-            throw new AuthenticationException("Cannot authenticate user");
-        }
+        return authenticationService.loginUser(userAuthRequest);
     }
 
 }
