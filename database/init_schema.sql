@@ -6,6 +6,7 @@ CREATE TABLE users (
 	uid INT PRIMARY KEY AUTO_INCREMENT,
 	username VARCHAR(20) NOT NULL,
 	password VARCHAR(65) NOT NULL,
+	is_workshop BOOLEAN DEFAULT false,
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -43,16 +44,35 @@ CREATE TABLE subtasks (
 INSERT INTO users (username, password) VALUES
 ('test', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0'); /* test */
 
+INSERT INTO users (username, password, is_workshop) VALUES
+('warsztat', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0', true); /* test */
+
 INSERT INTO cars (uid, name, description) VALUES
 (1, 'civic', 'gruz do latania pod tesco');
 
 INSERT INTO tasks(uid, cid, name, description, end_date) VALUES
-(1, 1, 'naprawa hondy', 'przy***alem w latarnie', '2023-12-24 16:00:00');
+(2, 1, 'naprawa hondy', 'przy***alem w latarnie', '2023-12-24 16:00:00');
 
 INSERT INTO subtasks(tid, name, description, end_date) VALUES
 (1, 'przedni zderzak', 'rozwalony po lewej stronie', '2023-12-22 13:00:00'),
 (1, 'lewe koło', 'odpadło przy kontakcie z kraweznikiem', '2023-12-23 15:00:00'),
 (1, 'karoseria', 'do wyklepania', '2023-12-24 14:00:00');
+
+DELIMITER //
+CREATE TRIGGER before_insert_cars
+BEFORE INSERT ON cars
+FOR EACH ROW
+BEGIN
+    DECLARE is_workshop_value BOOLEAN;
+    SELECT is_workshop INTO is_workshop_value FROM users WHERE uid = NEW.uid;
+    -- Check if is_workshop is true and prevent the insert if it is
+    IF is_workshop_value THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot insert into cars table for workshop users';
+    END IF;
+END;
+//
+DELIMITER ;
 
 CREATE USER serviceaccount IDENTIFIED BY 'cZtx7b$xwkSL';
 
