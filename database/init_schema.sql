@@ -3,48 +3,77 @@ CREATE DATABASE IF NOT EXISTS todo_calendar;
 USE todo_calendar;
 
 CREATE TABLE users (
-	uid INT(4) PRIMARY KEY auto_increment, /* user id */
-	login VARCHAR(20) NOT NULL,
-	password VARCHAR(65) NOT NULL /* sha256 */
+	uid INT PRIMARY KEY AUTO_INCREMENT,
+	username VARCHAR(20) NOT NULL,
+	password VARCHAR(65) NOT NULL,
+	is_workshop BOOLEAN DEFAULT false,
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE tasks (
-	tid INT(4) PRIMARY KEY auto_increment, /* task id */
-	uid INT(4), /* task owner - user id */
-	title VARCHAR(255) NOT NULL,
-	descr TEXT,
-	start_date DATETIME NOT NULL,
-	end_date DATETIME NOT NULL,
+CREATE TABLE cars (
+	cid INT PRIMARY KEY AUTO_INCREMENT,
+	uid INT,
+	name VARCHAR(100) NOT NULL,
+	description TEXT,
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  	FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE SET NULL
 );
 
-CREATE TABLE links (
-	lid INT(4) primary key auto_increment, /* link id */
-	tid INT(4), /* task id */
-	gid INT(4), /* guest - user id */
-	FOREIGN KEY (tid) REFERENCES tasks(tid), 
-	FOREIGN KEY (gid) REFERENCES users(uid) ON DELETE SET NULL
+CREATE TABLE tasks (
+	tid INT PRIMARY KEY AUTO_INCREMENT,
+	uid INT,
+	cid INT,
+	name VARCHAR(100) NOT NULL,
+	description TEXT,
+	end_date DATETIME NOT NULL,
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ 	FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE SET NULL,
+ 	FOREIGN KEY (cid) REFERENCES cars(cid) ON DELETE SET NULL
 );
 
-DELIMITER $$
-CREATE TRIGGER delete_links_after_task_delete
-AFTER DELETE ON tasks
+CREATE TABLE subtasks (
+	sid INT PRIMARY KEY AUTO_INCREMENT,
+	tid INT,
+	name VARCHAR(100) NOT NULL,
+	description TEXT,
+	end_date DATETIME NOT NULL,
+	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ 	FOREIGN KEY (tid) REFERENCES tasks(tid) ON DELETE SET NULL
+);
+
+INSERT INTO users (username, password) VALUES
+('test', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0'); /* test */
+
+INSERT INTO users (username, password, is_workshop) VALUES
+('warsztat', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0', true); /* test */
+
+INSERT INTO cars (uid, name, description) VALUES
+(1, 'civic', 'gruz do latania pod tesco');
+
+INSERT INTO tasks(uid, cid, name, description, end_date) VALUES
+(2, 1, 'naprawa hondy', 'przy***alem w latarnie', '2023-12-24 16:00:00');
+
+INSERT INTO subtasks(tid, name, description, end_date) VALUES
+(1, 'przedni zderzak', 'rozwalony po lewej stronie', '2023-12-22 13:00:00'),
+(1, 'lewe koło', 'odpadło przy kontakcie z kraweznikiem', '2023-12-23 15:00:00'),
+(1, 'karoseria', 'do wyklepania', '2023-12-24 14:00:00');
+
+DELIMITER //
+CREATE TRIGGER before_insert_cars
+BEFORE INSERT ON cars
 FOR EACH ROW
 BEGIN
-    DELETE FROM links WHERE tid = OLD.tid;
-END$$
+    DECLARE is_workshop_value BOOLEAN;
+    SELECT is_workshop INTO is_workshop_value FROM users WHERE uid = NEW.uid;
+    -- Check if is_workshop is true and prevent the insert if it is
+    IF is_workshop_value THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot insert into cars table for workshop users';
+    END IF;
+END;
+//
 DELIMITER ;
 
-INSERT INTO users (login, password) VALUES
-('test', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0'), /* test */
-('test2', '60303ae22b998861bce3b28f33eec1be758a213c86c93c076dbe9f558c11c75'); /* test2 */
+CREATE USER serviceaccount IDENTIFIED BY 'cZtx7b$xwkSL';
 
-INSERT INTO tasks(uid, title, descr, start_date, end_date) VALUES
-(1, 'Testowy task', 'Polega na sparwdzeniu czy dziala', '2023-11-20 15:00:00', '2023-11-21 12:00:00');
-
-INSERT INTO links(tid, gid) VALUES
-(1, 2);
-
-CREATE USER serviceaccount IDENTIFIED BY 'cZtx7b$xwkSL'; 
-
-GRANT ALL PRIVILEGES ON todo_calendar.* TO serviceaccount; 
+GRANT ALL PRIVILEGES ON todo_calendar.* TO serviceaccount;
