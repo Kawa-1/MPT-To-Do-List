@@ -36,7 +36,7 @@ CREATE TABLE subtasks (
 	tid INT,
 	name VARCHAR(100) NOT NULL,
 	description TEXT,
-	end_date DATETIME NOT NULL,
+	status VARCHAR(5) NOT NULL,
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  	FOREIGN KEY (tid) REFERENCES tasks(tid) ON DELETE SET NULL
 );
@@ -53,10 +53,10 @@ INSERT INTO cars (uid, name, description) VALUES
 INSERT INTO tasks(uid, cid, name, description, end_date) VALUES
 (2, 1, 'naprawa hondy', 'przy***alem w latarnie', '2023-12-24 16:00:00');
 
-INSERT INTO subtasks(tid, name, description, end_date) VALUES
-(1, 'przedni zderzak', 'rozwalony po lewej stronie', '2023-12-22 13:00:00'),
-(1, 'lewe koło', 'odpadło przy kontakcie z kraweznikiem', '2023-12-23 15:00:00'),
-(1, 'karoseria', 'do wyklepania', '2023-12-24 14:00:00');
+INSERT INTO subtasks(tid, name, description, status) VALUES
+(1, 'przedni zderzak', 'rozwalony po lewej stronie', 'todo'),
+(1, 'lewe koło', 'odpadło przy kontakcie z kraweznikiem', 'doing'),
+(1, 'karoseria', 'do wyklepania', 'done');
 
 DELIMITER //
 CREATE TRIGGER before_insert_cars
@@ -65,10 +65,29 @@ FOR EACH ROW
 BEGIN
     DECLARE is_workshop_value BOOLEAN;
     SELECT is_workshop INTO is_workshop_value FROM users WHERE uid = NEW.uid;
-    -- Check if is_workshop is true and prevent the insert if it is
     IF is_workshop_value THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Cannot insert into cars table for workshop users';
+    END IF;
+END;
+//
+CREATE TRIGGER subtasks_before_insert
+BEFORE INSERT ON subtasks
+FOR EACH ROW
+BEGIN
+    IF NEW.status NOT IN ('todo', 'doing', 'done') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid value for status column. Allowed values are: todo, doing, done';
+    END IF;
+END;
+//
+CREATE TRIGGER subtasks_before_update
+BEFORE UPDATE ON subtasks
+FOR EACH ROW
+BEGIN
+    IF NEW.status NOT IN ('todo', 'doing', 'done') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid value for status column. Allowed values are: todo, doing, done';
     END IF;
 END;
 //
