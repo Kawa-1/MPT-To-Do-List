@@ -1,15 +1,17 @@
 package pl.kt.agh.edu.authentication.service.entity;
 
-import pl.kt.agh.model.dto.UserDTO;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.kt.agh.model.dto.InternalUserDTO;
 
 import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
-    private final UserDTO userDTO;
+    @Getter
+    private final InternalUserDTO userDTO;
 
-    public UserDetailsImpl(UserDTO userDTO) {
+    public UserDetailsImpl(InternalUserDTO userDTO) {
         this.userDTO = userDTO;
     }
 

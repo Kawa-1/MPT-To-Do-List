@@ -6,12 +6,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.kt.agh.edu.authentication.service.entity.UserDetailsImpl;
-import pl.kt.agh.edu.common.constant.UserApiPath;
-import pl.kt.agh.model.dto.UserDTO;
+import pl.kt.agh.model.dto.InternalUserDTO;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private static final String AUTH_API = "https://user-service" + UserApiPath.INTERNAL_USER_AUTH;
+    private static final String AUTH_API = "https://user-service" + "/internal/user/auth";
 
     private final RestTemplate restTemplate;
     public UserDetailsServiceImpl(RestTemplate restTemplate) {
@@ -20,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDTO userDTO = restTemplate.getForObject(AUTH_API + "?user=" + username, UserDTO.class);
+        InternalUserDTO userDTO = restTemplate.getForObject(AUTH_API + "?user=" + username, InternalUserDTO.class);
         return new UserDetailsImpl(userDTO);
     }
 }

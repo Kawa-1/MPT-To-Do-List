@@ -22,6 +22,7 @@
         <module>gateway-service</module>
         <module>auth-service</module>
         <module>common</module>
+        <module>car-service</module>
     </modules>
 
     <dependencies>
@@ -37,6 +38,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     </properties>
 
     <dependencyManagement>

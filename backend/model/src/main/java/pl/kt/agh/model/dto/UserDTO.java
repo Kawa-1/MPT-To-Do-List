@@ -3,8 +3,7 @@ package pl.kt.agh.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import pl.kt.agh.model.enums.Role;
 
 @Data
 @NoArgsConstructor
@@ -12,5 +11,5 @@ import java.util.List;
 public class UserDTO {
     private String username;
     private String password;
-    private List<String> roles;
+    private Role role;
 }

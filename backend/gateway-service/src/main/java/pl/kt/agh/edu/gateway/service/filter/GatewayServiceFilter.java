@@ -1,27 +1,23 @@
 package pl.kt.agh.edu.gateway.service.filter;
 
-import pl.kt.agh.edu.common.exception.AuthenticationException;
-import pl.kt.agh.edu.common.util.JwtUtil;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import pl.kt.agh.edu.commons.jwt.JwtResolver;
 
 import java.util.List;
 
 @Component
 public class GatewayServiceFilter extends AbstractGatewayFilterFactory<GatewayServiceFilter.Config> {
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayServiceFilter.class);
-    @Value("${auth.jwt.secret}")
-    private String jwtSecret;
+    private final JwtResolver jwtResolver;
 
-    public GatewayServiceFilter() {
+    public GatewayServiceFilter(JwtResolver jwtResolver) {
         super(Config.class);
+        this.jwtResolver = jwtResolver;
     }
 
     @Override
@@ -41,24 +37,20 @@ public class GatewayServiceFilter extends AbstractGatewayFilterFactory<GatewaySe
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 authHeader = authHeader.substring(7);
             }
-            try {
-                JwtUtil.validateToken(authHeader, jwtSecret);
-            } catch (Exception e) {
-                LOGGER.warn("JWT validation failure.", e);
-                throw new AuthenticationException("JWT validation failure", e);
+            if (!jwtResolver.isTokenValid(authHeader)) {
+                LOGGER.warn("JWT token is expired!");
+                throw new AuthenticationException("JWT token is expired");
             }
             return chain.filter(exchange);
         };
     }
 
-    private boolean requiresAuthentication(Config config, String path) {
-        return config.unauthorizedApi.stream()
-                .noneMatch(unauthorizedPaths -> unauthorizedPaths.equals(path));
+    public static class AuthenticationException extends RuntimeException {
+        public AuthenticationException(String message) {
+            super(message);
+        }
     }
 
-    @NoArgsConstructor
-    @Data
     public static class Config {
-        private List<String> unauthorizedApi;
     }
 }

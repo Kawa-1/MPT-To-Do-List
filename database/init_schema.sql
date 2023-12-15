@@ -6,7 +6,7 @@ CREATE TABLE users (
 	uid INT PRIMARY KEY AUTO_INCREMENT,
 	username VARCHAR(20) NOT NULL,
 	password VARCHAR(65) NOT NULL,
-	is_workshop BOOLEAN DEFAULT false,
+	role VARCHAR(10) DEFAULT 'CLIENT',
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -41,31 +41,31 @@ CREATE TABLE subtasks (
  	FOREIGN KEY (tid) REFERENCES tasks(tid) ON DELETE SET NULL
 );
 
-INSERT INTO users (username, password) VALUES
-('test', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0'); /* test */
-
-INSERT INTO users (username, password, is_workshop) VALUES
-('warsztat', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0', true); /* test */
-
-INSERT INTO cars (uid, name, description) VALUES
-(1, 'civic', 'gruz do latania pod tesco');
-
-INSERT INTO tasks(uid, cid, name, description, end_date) VALUES
-(2, 1, 'naprawa hondy', 'przy***alem w latarnie', '2023-12-24 16:00:00');
-
-INSERT INTO subtasks(tid, name, description, status) VALUES
-(1, 'przedni zderzak', 'rozwalony po lewej stronie', 'todo'),
-(1, 'lewe koło', 'odpadło przy kontakcie z kraweznikiem', 'doing'),
-(1, 'karoseria', 'do wyklepania', 'done');
+-- INSERT INTO users (username, password) VALUES
+-- ('test', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0'); /* test */
+--
+-- INSERT INTO users (username, password, is_workshop) VALUES
+-- ('warsztat', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a0', true); /* test */
+--
+-- INSERT INTO cars (uid, name, description) VALUES
+-- (1, 'civic', 'gruz do latania pod tesco');
+--
+-- INSERT INTO tasks(uid, cid, name, description, end_date) VALUES
+-- (2, 1, 'naprawa hondy', 'przy***alem w latarnie', '2023-12-24 16:00:00');
+--
+-- INSERT INTO subtasks(tid, name, description, status) VALUES
+-- (1, 'przedni zderzak', 'rozwalony po lewej stronie', 'todo'),
+-- (1, 'lewe koło', 'odpadło przy kontakcie z kraweznikiem', 'doing'),
+-- (1, 'karoseria', 'do wyklepania', 'done');
 
 DELIMITER //
 CREATE TRIGGER before_insert_cars
 BEFORE INSERT ON cars
 FOR EACH ROW
 BEGIN
-    DECLARE is_workshop_value BOOLEAN;
-    SELECT is_workshop INTO is_workshop_value FROM users WHERE uid = NEW.uid;
-    IF is_workshop_value THEN
+    DECLARE is_workshop_value VARCHAR(10);
+    SELECT role INTO is_workshop_value FROM users WHERE uid = NEW.uid;
+    IF is_workshop_value NOT IN ('CLIENT') THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Cannot insert into cars table for workshop users';
     END IF;
