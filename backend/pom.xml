@@ -23,6 +23,7 @@
         <module>auth-service</module>
         <module>common</module>
         <module>car-service</module>
+        <module>task-service</module>
     </modules>
 
     <dependencies>
