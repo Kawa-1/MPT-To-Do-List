@@ -27,6 +27,12 @@ public class GatewayConfig {
                                 .filter(gatewayServiceFilter.apply(
                                         new GatewayServiceFilter.Config())))
                         .uri("lb://car-service"))
+                .route("task-service", r -> r.path("/task/**")
+                        .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
+                                .rewritePath("/service(?<segment>/?.*)", "$\\{segment}")
+                                .filter(gatewayServiceFilter.apply(
+                                        new GatewayServiceFilter.Config())))
+                        .uri("lb://task-service"))
                 .route("auth-service", r -> r.path("/auth/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE"))
                         .uri("lb://auth-service"))

@@ -36,6 +36,7 @@ build/
 
 ### logs ###
 logs/
+*.log
 
 ### Linux stuff ###
 %1
