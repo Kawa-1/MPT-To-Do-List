@@ -24,6 +24,7 @@
         <module>common</module>
         <module>car-service</module>
         <module>task-service</module>
+        <module>common/common-security</module>
     </modules>
 
     <dependencies>
