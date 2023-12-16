@@ -29,7 +29,7 @@ public class CarService {
     }
 
     public CarDTO createCar(CarDTO carDTO) {
-        Long userId = securityContextConverter.resolveSecurityContextClaim(Long.class, ID_CLAIM);
+        Long userId = securityContextConverter.resolveSecurityContextClaim(Number.class, ID_CLAIM).longValue();
         Car car = carMapper.toEntity(carDTO);
         car.setUid(userId);
         return carMapper.toDto(carRepository.save(car));

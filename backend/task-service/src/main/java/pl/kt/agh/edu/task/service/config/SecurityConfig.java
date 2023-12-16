@@ -33,7 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain userApiSecurityFilterChain(HttpSecurity http, JwtResolver jwtResolver) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .securityMatchers(matcher -> matcher.requestMatchers("/car/**"))
+                .securityMatchers(matcher -> matcher.requestMatchers("/task/**"))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
