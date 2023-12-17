@@ -6,12 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.ws.rs.core.SecurityContext;
-import pl.kt.agh.edu.common.security.SecurityContextConverter;
 import pl.kt.agh.edu.task.service.service.TaskService;
+import pl.kt.agh.model.dto.SubtaskDTO;
 import pl.kt.agh.model.dto.TaskDTO;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -29,4 +27,18 @@ public class TaskController {
         return taskService.createTask(taskDTO);
     }
 
+    @PostMapping("/task/subtask/create")
+    public SubtaskDTO createSubtask(@RequestBody SubtaskDTO subtaskDTO) {
+        return taskService.createSubtask(subtaskDTO);
+    }
+
+    @GetMapping("/task/subtask/all")
+    public List<SubtaskDTO> getSubtasks(@RequestBody SubtaskDTO subtaskDTO) {
+        return taskService.getSubtasks(subtaskDTO);
+    }
+
+    @PostMapping("/task/subtask/update")
+    public SubtaskDTO updateSubtask(@RequestBody SubtaskDTO subtaskDTO) {
+        return taskService.updateSubtask(subtaskDTO);
+    }
 }
