@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build: ./backend/auth-service
+    network_mode: host
+
+  car-service:
+    build: ./backend/car-service
+    network_mode: host
+
+  discovery-service:
+    build: ./backend/discovery-service
+    network_mode: host
+
+  gateway-service:
+    build: ./backend/gateway-service
+    network_mode: host
+
+  task-service:
+    build: ./backend/task-service
+    network_mode: host
+
+  user-service:
+    build: ./backend/user-service
+    network_mode: host
+  
+  database:
+    build: ./database
+    network_mode: host
+# Add other services here as needed
+
