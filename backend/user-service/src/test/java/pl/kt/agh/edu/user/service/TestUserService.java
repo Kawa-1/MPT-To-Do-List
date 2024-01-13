@@ -67,17 +67,17 @@ public class TestUserService {
         UserCreateDTO userCreateDTO = new UserCreateDTO();
         userCreateDTO.setUsername(username);
         userCreateDTO.setPassword(password);
-        userCreateDTO.setRole(Role.CAR_MECHANIC);
+        userCreateDTO.setRole(Role.MECHANIC);
 
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        user.setRole(Role.CAR_MECHANIC);
+        user.setRole(Role.MECHANIC);
 
         UserDTO expectedUserDto = new UserDTO();
         expectedUserDto.setUsername(username);
         expectedUserDto.setPassword(password);
-        expectedUserDto.setRole(Role.CAR_MECHANIC);
+        expectedUserDto.setRole(Role.MECHANIC);
 
         when(userRepository.save(any())).thenReturn(user);
 
