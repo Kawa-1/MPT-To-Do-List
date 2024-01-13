@@ -81,8 +81,8 @@ public class TaskService {
         return subtaskMapper.toDto(subtaskRepository.save(subtask));
     }
 
-    public List<SubtaskDTO> getSubtasks(SubtaskDTO subtaskDTO) {
-        return subtaskRepository.findAllByTid(subtaskDTO.getTid()).stream().map(subtaskMapper::toDto).collect(Collectors.toList());
+    public List<SubtaskDTO> getSubtasks(Long tid) {
+        return subtaskRepository.findAllByTid(tid).stream().map(subtaskMapper::toDto).collect(Collectors.toList());
     }
 
     public SubtaskDTO updateSubtask(SubtaskDTO subtaskDTO) {

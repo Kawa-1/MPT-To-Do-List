@@ -40,8 +40,8 @@ public class TaskController {
     }
 
     @GetMapping("/task/subtask/all")
-    public List<SubtaskDTO> getSubtasks(@RequestBody SubtaskDTO subtaskDTO) {
-        return taskService.getSubtasks(subtaskDTO);
+    public List<SubtaskDTO> getSubtasks(@RequestParam Long tid) {
+        return taskService.getSubtasks(tid);
     }
 
     @PostMapping("/task/subtask/update")
