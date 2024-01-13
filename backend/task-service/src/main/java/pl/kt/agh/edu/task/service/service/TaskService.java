@@ -102,6 +102,16 @@ public class TaskService {
                 .build();
     }
 
+    public List<TaskDTO> getAssignedTasks(){
+        String roleStr = securityContextConverter.resolveSecurityContextClaim(String.class, SecurityContextConverter.ROLE_CLAIM);
+        if (Role.valueOf(roleStr) != Role.MECHANIC){
+            LOGGER.warn("Only user with role mechanic can get assigned tasks!");
+            throw new IllegalArgumentException("Only user with role mechanic can get assigned tasks!");
+        }
+        long uid = securityContextConverter.resolveSecurityContextClaim(Number.class, SecurityContextConverter.ID_CLAIM).longValue();
+        return taskRepository.findAllByUid(uid).stream().map(taskMapper::toDto).collect(Collectors.toList());
+    }
+
     public TaskDTO assignTask(Long tid) {
         String roleStr = securityContextConverter.resolveSecurityContextClaim(String.class, SecurityContextConverter.ROLE_CLAIM);
         if (Role.valueOf(roleStr) != Role.MECHANIC){

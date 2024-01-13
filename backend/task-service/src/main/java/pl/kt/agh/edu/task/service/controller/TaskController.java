@@ -29,6 +29,11 @@ public class TaskController {
         return taskService.assignTask(tid);
     }
 
+    @GetMapping("/task/assigned")
+    public List<TaskDTO> assignedTasks(){
+        return taskService.getAssignedTasks();
+    }
+
     @PostMapping("/task/subtask/create")
     public SubtaskDTO createSubtask(@RequestBody SubtaskDTO subtaskDTO) {
         return taskService.createSubtask(subtaskDTO);
