@@ -45,7 +45,7 @@ public class TaskController {
     }
 
     @PostMapping("/task/subtask/update")
-    public SubtaskDTO updateSubtask(@RequestBody SubtaskDTO subtaskDTO) {
-        return taskService.updateSubtask(subtaskDTO);
+    public SubtaskDTO updateSubtask(@RequestParam Long sid, @RequestParam String status) {
+        return taskService.updateSubtask(sid, status);
     }
 }

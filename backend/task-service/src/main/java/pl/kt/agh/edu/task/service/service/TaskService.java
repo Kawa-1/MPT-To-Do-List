@@ -19,6 +19,7 @@ import pl.kt.agh.model.dto.CarDTO;
 import pl.kt.agh.model.dto.SubtaskDTO;
 import pl.kt.agh.model.dto.TaskDTO;
 import pl.kt.agh.model.enums.Role;
+import pl.kt.agh.model.enums.SubtaskStatus;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -85,10 +86,11 @@ public class TaskService {
         return subtaskRepository.findAllByTid(tid).stream().map(subtaskMapper::toDto).collect(Collectors.toList());
     }
 
-    public SubtaskDTO updateSubtask(SubtaskDTO subtaskDTO) {
-        Subtask oldSubtask = subtaskRepository.findBySid(subtaskDTO.getSid());
-        subtaskDTO.setCreated(oldSubtask.getCreated());
-        oldSubtask = subtaskMapper.toEntity(subtaskDTO);
+    public SubtaskDTO updateSubtask(Long sid, String status) {
+        SubtaskStatus subtaskStatus = SubtaskStatus.fromString(status);
+        Subtask oldSubtask = subtaskRepository.findBySid(sid);
+        oldSubtask.setCreated(LocalDateTime.now());
+        oldSubtask.setStatus(subtaskStatus.getName());
 
         return subtaskMapper.toDto(subtaskRepository.save(oldSubtask));
     }
