@@ -44,7 +44,7 @@ public class TaskController {
         return taskService.getSubtasks(tid);
     }
 
-    @PostMapping("/task/subtask/update")
+    @PutMapping("/task/subtask/update")
     public SubtaskDTO updateSubtask(@RequestParam Long sid, @RequestParam String status) {
         return taskService.updateSubtask(sid, status);
     }
