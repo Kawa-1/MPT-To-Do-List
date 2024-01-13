@@ -16,5 +16,6 @@
     <modules>
         <module>common-jwt</module>
         <module>common-filter</module>
+        <module>common-security</module>
     </modules>
 </project>
