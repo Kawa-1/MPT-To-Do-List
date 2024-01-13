@@ -1,6 +1,8 @@
 package pl.kt.agh.edu.task.service.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 import pl.kt.agh.edu.common.filter.JwtFilterBase;
 import pl.kt.agh.edu.common.security.SecurityContextConverter;
 import pl.kt.agh.edu.commons.jwt.JwtResolver;
@@ -41,6 +44,12 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtFilterBase(jwtResolver), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
     }
 
 }

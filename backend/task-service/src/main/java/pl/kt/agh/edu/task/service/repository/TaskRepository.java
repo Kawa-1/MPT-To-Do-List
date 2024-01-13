@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findAllByUid(Long uid);
+    List<Task> findAllByUidIsNull();
+    List<Task> findAllByCidIn(List<Long> carId);
 }

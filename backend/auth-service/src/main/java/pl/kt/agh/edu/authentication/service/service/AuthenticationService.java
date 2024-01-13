@@ -42,7 +42,7 @@ public class AuthenticationService {
         if (authenticate.isAuthenticated()) {
             UserDetailsImpl userDetails = (UserDetailsImpl) authenticate.getPrincipal();
             Map<String, Object> claims = Map.of(
-                    "role", userDetails.getUserDTO().getRole().name(),
+                    "role", userDetails.getUserDTO().getRole(),
                     "uid", userDetails.getUserDTO().getId()
             );
             String jwt = jwtResolverExtService.generateToken(claims, userDetails);

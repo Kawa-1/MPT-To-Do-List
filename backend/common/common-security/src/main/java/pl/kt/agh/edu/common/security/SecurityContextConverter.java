@@ -35,4 +35,9 @@ public class SecurityContextConverter {
         return null;
     }
 
+    public String unwrapSecurityToken(){
+        UsernamePasswordAuthenticationToken uwap = unwrapSecurityAuthentication(UsernamePasswordAuthenticationToken.class);
+        return (String) uwap.getCredentials();
+    }
+
 }
