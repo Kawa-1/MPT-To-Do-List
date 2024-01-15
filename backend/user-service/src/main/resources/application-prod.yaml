@@ -1,0 +1,16 @@
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/
+spring:
+  application:
+    name: user-service
+  datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      password: cZtx7b$xwkSL
+      url: jdbc:mysql://mpt-database:3306/todo_calendar
+      username: serviceaccount
+  jpa:
+      database-platform: org.hibernate.dialect.MySQLDialect

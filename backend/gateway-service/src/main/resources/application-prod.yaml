@@ -1,0 +1,45 @@
+server:
+  port: 8090
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/
+spring:
+  application:
+    name: gateway-service
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: user-service
+#          uri: "lb://USER-SERVICE"
+#          predicates:
+#            - Path="/user/**"
+#          filters:
+#            - RewritePath=/user(?<segment>/?.*), $\{segment}
+#            - name: GatewayServiceFilter
+#              args:
+#                unauthorizedApi:
+#                  - "/auth/validate"
+#                  - "/auth/login"
+#                  - "/auth/register"
+#        - id: auth-service
+#          uri: "lb://auth-service/"
+#          filters:
+#            - RewritePath=/auth(?<segment>/?.*), $\{segment}
+#          predicates:
+#            - Path="/auth/**"
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,gateway
+
+auth:
+  jwt:
+    secret: "${JWT_SECRET:e76f56a7a8a347962652f47dcc23f7e77718ba292da3fd6ed504d1eb4663da93}"

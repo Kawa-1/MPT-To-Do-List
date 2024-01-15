@@ -2,31 +2,105 @@ version: '3.8'
 
 services:
   auth-service:
+    container_name: auth-service
+    hostname: auth-service
+    networks:
+      - mpt-net
     build: ./backend/auth-service
-    network_mode: host
+    environment:
+      spring_profiles_active: prod
+    depends_on:
+      database:
+        condition: service_healthy
+      user-service:
+        condition: service_started
 
   car-service:
+    container_name: car-service
+    hostname: car-service
+    networks:
+      - mpt-net
     build: ./backend/car-service
-    network_mode: host
+    environment:
+      spring_profiles_active: prod
+    depends_on:
+      database:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
 
   discovery-service:
+    container_name: discovery-service
+    hostname: discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - mpt-net
     build: ./backend/discovery-service
-    network_mode: host
+
 
   gateway-service:
+    container_name: gateway-service
+    hostname: gateway-service
+    networks:
+      - mpt-net
     build: ./backend/gateway-service
-    network_mode: host
+    environment:
+      spring_profiles_active: prod
+    ports:
+      - "8090:8090"
+    depends_on:
+      discovery-service:
+        condition: service_started
+
 
   task-service:
+    container_name: task-service
+    hostname: task-service
+    networks:
+      - mpt-net
     build: ./backend/task-service
-    network_mode: host
+    environment:
+      spring_profiles_active: prod
+    depends_on:
+      database:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+
 
   user-service:
+    container_name: user-service
+    hostname: user-service
+    networks:
+      - mpt-net
     build: ./backend/user-service
-    network_mode: host
+    environment:
+      spring_profiles_active: prod
+    depends_on:
+      database:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+
   
   database:
+    container_name: mpt-database
+    hostname: mpt-database
+    networks:
+      - mpt-net
     build: ./database
-    network_mode: host
-# Add other services here as needed
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: mysql -u root --password=$$MYSQL_ROOT_PASSWORD -e 'show tables from todo_calendar'
+      start_period: 3s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+
+
+networks:
+  mpt-net:
+    driver: bridge
 
